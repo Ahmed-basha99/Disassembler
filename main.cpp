@@ -125,19 +125,25 @@ void instDecExec(unsigned int instWord)
             }
             else if (func3_16bit ==2){  //CI
                 // C.LI
+                cout << "C.LI\t " <<   convert5bitToABIName(CBrs1) << ",    " <<CIimm << "\b" ;
             }
             else if (func3_16bit == 3){
                 //C.lui
             }
             else if (func3_16bit==4){ // checking for func 2
+                CBrs1 = CBrs1 & 7;  // removing the most two significant bits coz they are for func2
+
                 if (func2==0) { // CI
                     //SRLI
+                    cout << "C.SRLI\t" << convert3BitToABIName(CBrs1) << ",   " << CIimm << "\n";
                 }
                 else if (func2==1){ // CI
                     // SRAI
+                    cout << "C.SRAI\t" << convert3BitToABIName(CBrs1) << ",   " << CIimm << "\n";
                 }
                 else if (func2==2){ //CI
                     //ANDI
+                    cout << "C.ANDI\t" << convert3BitToABIName(CBrs1) << ",   " << CIimm << "\n";
                 }
                 // CR
                 else if (func2==3 && func4_extraBitForCR==0){ // func2 = 3
@@ -156,9 +162,6 @@ void instDecExec(unsigned int instWord)
                     }
 
                 }
-
-
-
 
             }
 
