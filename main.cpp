@@ -104,7 +104,7 @@ void instDecExec(unsigned int instWord)
                         rs16bit) << ")\n";
             else if (func3_16bit==6) cout << "C.SW\t" << convert3BitToABIName(rd16bit) << "\t" << offset << "(" << convert3BitToABIName(
                         rs16bit) << ")\n";
-            else if (func3_16bit == 0)
+            else if (func3_16bit == 0) // CIW format
                 cout << "C.ADDI4SPN\t" << convert3BitToABIName(rd16bit) << ",\t" << imm_CIW << ")\n";
             else cout << "not supported register based load/store format-RVC";
         }
@@ -237,6 +237,9 @@ void instDecExec(unsigned int instWord)
             case 4:    cout << "\tLHU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
             }
+        }
+        else if (opcode == 0x67) { // JALR I-Type
+            cout << "\tJALR\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
         }
         else if (opcode == 0x37) { // LUI U-Type
             cout << "\tLUI\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
