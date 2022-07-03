@@ -99,10 +99,13 @@ void instDecExec(unsigned int instWord)
             unsigned int rd16bit = (instWord >>2) & 7;
             unsigned int rs16bit = (instWord >>7) & 7;
             unsigned int offset = (((instWord >>10) &7 ) <<1) + (((instWord >>5) & 1 )<<4) + ((instWord >>6) & 1) ;
+            unsigned int imm_CIW = (instWord >> 5) & 0xFF;
             if (func3_16bit==2) cout << "C.LW\t" << convert3BitToABIName(rd16bit) << "\t" << offset << "(" << convert3BitToABIName(
                         rs16bit) << ")\n";
             else if (func3_16bit==6) cout << "C.SW\t" << convert3BitToABIName(rd16bit) << "\t" << offset << "(" << convert3BitToABIName(
                         rs16bit) << ")\n";
+            else if (func3_16bit == 0)
+                cout << "C.ADDI4SPN\t" << convert3BitToABIName(rd16bit) << ",\t" << imm_CIW << ")\n";
             else cout << "not supported register based load/store format-RVC";
         }
         else { //instructionType ==1  // control instructions
@@ -189,14 +192,6 @@ void instDecExec(unsigned int instWord)
                 break;
                 default:
                     cout << "\tUnkown R Instruction \n";
-            }
-        }
-        else if(opcode == 0x13){	// I instructions
-            switch(funct3){
-                case 0:	cout << "\tADDI\tx" << rd << ", x" << rs1 << ", " << hex << "0x" << (int)I_imm << "\n";
-                break;
-                default:
-                    cout << "\tUnkown I Instruction \n";
             }
         }
         else if (opcode == 0x13) {    // I instructions
