@@ -180,20 +180,41 @@ void instDecExec(unsigned int instWord)
 
     }
     else {  // 32 bit instruction
-        if(opcode == 0x33){		// R Instructions
-            switch(funct3){
-                case 0: if(funct7 == 32)
-                {
-                    cout << "\tSUB\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+            if(opcode == 0x33){		// R Instructions
+
+                cout<<funct3<<"DFV\n";
+
+                switch(funct3){
+                    case 0: if(funct7 == 32) {
+                            cout << "\tSUB\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        }
+                        else {
+                            cout << "\tADD\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        }
+                        break;
+                    case 1: cout << "\tSLL\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        break;
+                    case 2:  cout << "\tSLT\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        break;
+                    case 3:  cout << "\tSLTU\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        break;
+                    case 4:  cout << "\tXOR\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        break;
+                    case 5:  if(funct7 == 32) {
+                            cout << "\tSRA\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        }
+                        else {
+                            cout << "\tSRL\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        }
+                        break;
+                    case 6:  cout << "\tOR\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        break;
+                    case 7:  cout << "\tAND\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                        break;
+                    default:
+                        cout << "\tUnkown Instruction \n";
                 }
-                else {
-                    cout << "\tADD\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                }
-                break;
-                default:
-                    cout << "\tUnkown R Instruction \n";
             }
-        }
         else if (opcode == 0x13) {    // I instructions
             switch (funct3) {
             case 0:    cout << "\tADDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
@@ -260,7 +281,7 @@ void instDecExec(unsigned int instWord)
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (49149);
+    instDecExec (1390899);
 
 
 
