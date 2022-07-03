@@ -65,7 +65,7 @@ void instDecExec(unsigned int instWord)
             unsigned int func4_extraBitForCR = (instWord>>12) &1;
             unsigned int func3_16bit = (instWord >>13) &  7;
             unsigned int func2 = (instWord >> 10)  &3;
-            unsigned int CIimm = ((instWord >>2) &31) +( ((instWord >>12) & 1)<<5);
+            unsigned int immCI = ((instWord >> 2) & 31) + ( ((instWord >> 12) & 1) << 5);
             if (instructionType==2){
                 if (func3_16bit == 2 ) cout << "C.LWSP \t" ;
 
@@ -84,7 +84,7 @@ void instDecExec(unsigned int instWord)
                 else if (func3_16bit==0){
                     // slli
                     unsigned int dest = (instWord >>7) & 31;
-                    cout << "C.SLLI\t" <<  convert5bitToABIName(dest) << " ,    " << CIimm;
+                    cout << "C.SLLI\t" << convert5bitToABIName(dest) << " ,    " << immCI;
                 }
         }
 
@@ -106,11 +106,11 @@ void instDecExec(unsigned int instWord)
 
             if (func3_16bit==5){ // CJ format
                 // C.J
-                cout << "jal\tX0 , " << immCJ << "\n";
+                cout << "C.j\t " << immCJ << "\n";
             }
             else if (func3_16bit==1) { // CJ format
                 // c.jal // saves pc+2 to ra =>x1
-                cout << "jal\tx1 , " << immCJ << "\n";
+                cout << "c.jal , " << immCJ << "\n";
             }
             else if (func3_16bit==6) { //CB format
                 // C.BEQZ
@@ -125,7 +125,7 @@ void instDecExec(unsigned int instWord)
             }
             else if (func3_16bit ==2){  //CI
                 // C.LI
-                cout << "C.LI\t " <<   convert5bitToABIName(CBrs1) << ",    " <<CIimm << "\b" ;
+                cout << "C.LI\t " << convert5bitToABIName(CBrs1) << ",    " << immCI << "\b" ;
             }
             else if (func3_16bit == 3){
                 //C.lui
@@ -135,15 +135,15 @@ void instDecExec(unsigned int instWord)
 
                 if (func2==0) { // CI
                     //SRLI
-                    cout << "C.SRLI\t" << convert3BitToABIName(CBrs1) << ",   " << CIimm << "\n";
+                    cout << "C.SRLI\t" << convert3BitToABIName(CBrs1) << ",   " << immCI << "\n";
                 }
                 else if (func2==1){ // CI
                     // SRAI
-                    cout << "C.SRAI\t" << convert3BitToABIName(CBrs1) << ",   " << CIimm << "\n";
+                    cout << "C.SRAI\t" << convert3BitToABIName(CBrs1) << ",   " << immCI << "\n";
                 }
                 else if (func2==2){ //CI
                     //ANDI
-                    cout << "C.ANDI\t" << convert3BitToABIName(CBrs1) << ",   " << CIimm << "\n";
+                    cout << "C.ANDI\t" << convert3BitToABIName(CBrs1) << ",   " << immCI << "\n";
                 }
                 // CR
                 else if (func2==3 && func4_extraBitForCR==0){ // func2 = 3
@@ -205,7 +205,8 @@ void instDecExec(unsigned int instWord)
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (56616);
+    instDecExec (49149);
+
 
 
 }
