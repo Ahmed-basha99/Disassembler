@@ -3,6 +3,7 @@
 #include <fstream>
 #include "stdlib.h"
 #include <iomanip>
+#include <iostream>
 
 using namespace std;
 
@@ -48,6 +49,7 @@ void instDecExec(unsigned int instWord)
     unsigned int address;
 
     unsigned int instPC = pc - 4;
+    unsigned int shamt;
 
     opcode = instWord & 0x0000007F;
     rd = (instWord >> 7) & 0x0000001F;
@@ -55,8 +57,12 @@ void instDecExec(unsigned int instWord)
     rs1 = (instWord >> 15) & 0x0000001F;
     rs2 = (instWord >> 20) & 0x0000001F;
 
+    shamt = (instWord >> 20) & 0x0000001F;
+
+
     // â€” inst[31] â€” inst[30:25] inst[24:21] inst[20]
     I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+    U_imm = (instWord >> 12);
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
@@ -191,6 +197,56 @@ void instDecExec(unsigned int instWord)
                 default:
                     cout << "\tUnkown I Instruction \n";
             }
+        }
+        else if (opcode == 0x13) {    // I instructions
+            switch (funct3) {
+            case 0:    cout << "\tADDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
+                break;
+            case 1:    cout << "\tSLLI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)shamt << "\n";
+                break;
+            case 2:    cout << "\tSLTI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
+                break;
+            case 3:    cout << "\tSLTIU\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
+                break;
+            case 4:    cout << "\tXORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
+                break;
+            case 5: {
+                if (((instWord >> 30) & 1) == 1) {
+                    cout << "\tSRAI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)shamt << "\n";
+                }
+                else {
+                    cout << "\tSRLI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)shamt << "\n";
+                }
+
+            }
+                  break;
+            case 6:    cout << "\tORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
+                break;
+            case 7:    cout << "\tANDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
+                break;
+            default:
+                cout << "\tUnkown I Instruction \n";
+            }
+        }
+        else if (opcode == 0x3) { // I-Type
+            switch (funct3) {
+            case 0:    cout << "\tLB\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+                break;
+            case 1:    cout << "\tLH\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+                break;
+            case 2:    cout << "\tLW\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+                break;
+            case 3:    cout << "\tLBU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+                break;
+            case 4:    cout << "\tLHU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+                break;
+            }
+        }
+        else if (opcode == 0x37) { // LUI U-Type
+            cout << "\tLUI\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
+        }
+        else if (opcode == 0x17) { // AUIC - U-Type
+            cout << "\tAUIPC\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
         }
         else {
             cout << "\tUnkown Instruction \n";
