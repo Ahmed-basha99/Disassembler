@@ -330,8 +330,16 @@ void instDecExec(unsigned int instWord)
         }
         else if (opcode == 0x6F) //jal
             {
-                cout << "\tJAL\tx" << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)J_imm << "\n"; // how to seperate el int
+                cout << "\tJAL\t" << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)J_imm << "\n"; // how to seperate el int
             }
+
+        else if ( opcode== 0x73){
+
+            unsigned int rest = (instWord>>7);
+            if (!rest) cout<<"\tecall\n";
+            else cout<< "\tebreak\n";
+
+        }
     }
 
 }
@@ -339,7 +347,7 @@ void instDecExec(unsigned int instWord)
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (11870899);
+    instDecExec (115);
 
 
 
