@@ -45,7 +45,7 @@ void printPrefix(unsigned int instA, unsigned int instW){
 
 void instDecExec(unsigned int instWord)
 {
-    unsigned int rd, rs1, rs2, funct3, funct7, opcode;
+    unsigned int rd, rs1, rs2,rs2_C, funct3, funct7, opcode;
     unsigned int I_imm, S_imm, B_imm, U_imm, J_imm;
     unsigned int address;
 
@@ -57,7 +57,7 @@ void instDecExec(unsigned int instWord)
     funct3 = (instWord >> 12) & 0x00000007;
     rs1 = (instWord >> 15) & 0x0000001F;
     rs2 = (instWord >> 20) & 0x0000001F;
-
+    rs2_C =(instWord >> 2) & 0x0000001F;
     shamt = (instWord >> 20) & 0x0000001F;
 
 
@@ -67,28 +67,33 @@ void instDecExec(unsigned int instWord)
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
-
+cout<<instructionType<<endl;
         if (instructionType!=3) { // 16 bit instruction
             unsigned int func4_extraBitForCR = (instWord>>12) &1;
             unsigned int func3_16bit = (instWord >>13) &  7;
             unsigned int func2 = (instWord >> 10)  &3;
             unsigned int immCI = ((instWord >> 2) & 31) + ( ((instWord >> 12) & 1) << 5);
             if (instructionType==2){
-                if (func3_16bit == 2 ) cout << "C.LWSP \t" ;
+                if (func3_16bit == 2 )
+                    cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
 
                 else if (func3_16bit== 4) {                // CR format
-                    unsigned int CrRS1 = (instWord >>7) & 31 ;  // still need to decode this
+                    unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
                     // C.jr
                     if (!func4_extraBitForCR)
 
                     {
-
-                       cout << "jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        if (!rs2_C)
+                            cout << "jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        else
+                            cout << "MV  \tx0, " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1) ;
                     }
 
                     else  { //C.jalr
-
-                        cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        if ( !rs2_C && !rd ) cout<<"EBREAK\n";
+                        else if (!rs2_C)
+                             cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        else cout << "ADD \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C);
                     }
 
 
@@ -284,9 +289,10 @@ void instDecExec(unsigned int instWord)
 
 }
 
+
 int main (){
     unsigned  int input = 23912;
-    instDecExec (1390899);
+    instDecExec (37650);
 
 
 
