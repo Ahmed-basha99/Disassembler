@@ -204,44 +204,4 @@ void instDecExec(unsigned int instWord)
 
 }
 
-int main (){
-    unsigned  int input = 23912;
-    instDecExec (49149);
-
-
-
-}
-
-
-//int main(int argc, char *argv[]){
-//
-//    unsigned int instWord=0;
-//    ifstream inFile;
-//    ofstream outFile;
-//    if(argc<2) {
-//        emitError("use: rvcdiss <machine_code_file_name>\n");
-//    }
-//
-//    inFile.open(argv[1], ios::in | ios::binary | ios::ate);
-//    if(inFile.is_open())
-//    {
-//        int fsize = inFile.tellg();
-//
-//        inFile.seekg (0, inFile.beg);
-//        if(!inFile.read((char *)memory, fsize)) emitError("Cannot read from input file\n");
-//
-//        while(true){
-//            // 2 pm
-//            instWord = 	(unsigned char)memory[pc] |
-//                    (((unsigned char)memory[pc+1])<<8) |
-//                    (((unsigned char)memory[pc+2])<<16) |
-//                    (((unsigned char)memory[pc+3])<<24);
-//            pc += 4;
-//            cout << instWord << "\t";
-//            // remove the following line once you have a complete simulator
-//            if(pc==40) break;			// stop when PC reached address 32
-//            instDecExec(instWord);
-//        }
-//    } else emitError("Cannot access input file\n");
-//}
 

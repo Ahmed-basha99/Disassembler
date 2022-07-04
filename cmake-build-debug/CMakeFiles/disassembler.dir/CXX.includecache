@@ -7,7 +7,9 @@
 #IncludeRegexTransform: 
 
 C:/Users/ahmed/CLionProjects/disassembler/main.cpp
-bits/stdc++.h
+iostream
+-
+unordered_map
 -
 fstream
 -
