@@ -1,0 +1,38 @@
+
+a.out:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	40000693          	li	a3,1024
+   4:	4281                	li	t0,0
+   6:	4311                	li	t1,4
+
+00000008 <while_input>:
+   8:	0062dd63          	ble	t1,t0,22 <end_input>
+   c:	4895                	li	a7,5
+   e:	00000073          	ecall
+  12:	00229393          	slli	t2,t0,0x2
+  16:	93b6                	add	t2,t2,a3
+  18:	00a3a023          	sw	a0,0(t2)
+  1c:	0285                	addi	t0,t0,1
+  1e:	febff06f          	j	8 <while_input>
+
+00000022 <end_input>:
+  22:	4281                	li	t0,0
+  24:	430d                	li	t1,3
+
+00000026 <while_output>:
+  26:	00534d63          	blt	t1,t0,40 <done>
+  2a:	00231393          	slli	t2,t1,0x2
+  2e:	93b6                	add	t2,t2,a3
+  30:	0003a503          	lw	a0,0(t2)
+  34:	4885                	li	a7,1
+  36:	00000073          	ecall
+  3a:	137d                	addi	t1,t1,-1
+  3c:	febff06f          	j	26 <while_output>
+
+00000040 <done>:
+  40:	48a9                	li	a7,10
+  42:	00000073          	ecall

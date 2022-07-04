@@ -359,12 +359,11 @@ int main(int argc, char *argv[]){
     unsigned int instWord=0;
     ifstream inFile;
     ofstream outFile;
-    argv[1]= "../div.bin";
+    argv[1]= "../samples/div.bin";
 //    cout << argc << "\n";
 //    if(argc<2) {
 //        emitError("use: rvcdiss <machine_code_file_name>\n");
 //    }
-
 
     inFile.open(argv[1], ios::in | ios::binary | ios::ate);
     if(inFile.is_open())
@@ -374,7 +373,7 @@ int main(int argc, char *argv[]){
         inFile.seekg (0, inFile.beg);
         if(!inFile.read((char *)memory, fsize)) emitError("Cannot read from input file\n");
 
-        while(true){
+        while(pc<fsize){
             // 2 pm
             instWord = 	(unsigned char)memory[pc] |
                     (((unsigned char)memory[pc+1])<<8) |
@@ -382,10 +381,18 @@ int main(int argc, char *argv[]){
                     (((unsigned char)memory[pc+3])<<24);
             pc += 4;
             cout << instWord << "\t";
-            // remove the following line once you have a complete simulator
-            if(pc==40) break;			// stop when PC reached address 32
+//            // remove the following line once you have a complete simulator
             instDecExec(instWord);
+
+//            if(pc==40) {
+//                cout <<"break\n";
+//                break;			// stop when PC reached address 32
+//            }
         }
     } else emitError("Cannot access input file\n");
+
+    return 0;
 }
+
+
 
