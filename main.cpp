@@ -70,7 +70,7 @@ void instDecExec(unsigned int instWord)
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
 
-        if (instructionType!=3) { // 16 bit instruction
+    if (instructionType!=3) { // 16 bit instruction
             unsigned int func4_extraBitForCR = (instWord>>12) &1;
             unsigned int func3_16bit = (instWord >>13) &  7;
             unsigned int func2 = (instWord >> 10)  &3;
@@ -150,7 +150,10 @@ void instDecExec(unsigned int instWord)
                 cout << "C.LI\t " << convert5bitToABIName(CBrs1) << ",    " << immCI << "\b" ;
             }
             else if (func3_16bit == 3){
-                //C.lui
+
+                if (rd!= 2 && rd!= 0)
+                    cout << "C.LUI\t " << convert5bitToABIName(rd) << ",    " << immCI << "\b" ;
+
             }
             else if (func3_16bit==4){ // checking for func 2
                 CBrs1 = CBrs1 & 7;  // removing the most two significant bits coz they are for func2
@@ -191,10 +194,10 @@ void instDecExec(unsigned int instWord)
         }
             else if (instructionType ==2)
                 if (func3_16bit == 6) //sp
-                cout << "\tSWSP\tx" << convert5bitToABIName(rs2_C) << ", "  << hex << "0x" << (int)SCimm << "\n";       
+                cout << "\tSWSP\tx" << convert5bitToABIName(rs2_C) << ", "  << hex << "0x" << (int)SCimm << "\n";
 
     }
-    else {  // 32 bit instruction
+        else {  // 32 bit instruction
             if(opcode == 0x33){		// R Instructions
 
 
