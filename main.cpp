@@ -70,7 +70,7 @@ void instDecExec(unsigned int instWord)
     U_imm = (instWord >> 12);
     B_imm = ((instWord >> 25) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
 	S_imm= ((instWord >> 25) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
-	J_imm = ((instWord >> 25) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+	J_imm = ((instWord >> 12) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
