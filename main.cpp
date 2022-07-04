@@ -153,19 +153,7 @@ void instDecExec(unsigned int instWord)
                 cout << "C.LI\t " << convert5bitToABIName(CBrs1) << ",    " << immCI << "\b" ;
             }
             else if (func3_16bit == 3){
-
-                if ( rd == 2)
-                    // C.ADDI16SP;
-                    cout<<"";
-                 else
-                {
-                    unsigned int  nzimm =  ((instWord>>2)&0x01F)+((instWord>>12)&1);
-                    cout << "C.LUI\t " << convert5bitToABIName(rd) << ",    " << nzimm << "\b" ;
-
-                }
-
-
-
+                //C.lui
             }
             else if (func3_16bit==4){ // checking for func 2
                 CBrs1 = CBrs1 & 7;  // removing the most two significant bits coz they are for func2
@@ -185,37 +173,17 @@ void instDecExec(unsigned int instWord)
                 // CR
                 else if (func2==3 && func4_extraBitForCR==0){ // func2 = 3
                     int CRfunc22 = (instWord >> 5)&3;
-//unsigned int func4_extraBitForCR = (instWord>>12) &1;
-                    if (!func4_extraBitForCR)
-                    {
-                        unsigned  int rd_CR = (instWord>>7)&7;
-                        unsigned  int rs2_CR = (instWord>>2)&7;
-                        if (CRfunc22==0){
-                            cout << "C.SUB\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
-                        }
-                        else if (CRfunc22==1){
-                            cout << "C.XOR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
-                        }
-                        else if (CRfunc22==2){
-                            cout << "C.OR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
-                        }
-                        else if (CRfunc22==3){
-                            cout << "C.AND\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
-                        }
-
+                    if (CRfunc22==0){
+                        // C.SUB
                     }
-                    else{
-
-                        unsigned  int rd_CR = (instWord>>7)&7;
-                        unsigned  int rs2_CR = (instWord>>2)&7;
-                        if (CRfunc22==0){
-                            cout << "C.SUBW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
-                        }
-                        else if (CRfunc22==1){
-                            cout << "C.ADDW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
-                        }
-
-
+                    else if (CRfunc22==1){
+                        //C.XOR
+                    }
+                    else if (CRfunc22==2){
+                        //C.OR
+                    }
+                    else if (CRfunc22==3){
+                        // C.AND
                     }
 
                 }
@@ -224,8 +192,8 @@ void instDecExec(unsigned int instWord)
 
 
         }
-      
-                     
+
+
 
     }
     else {  // 32 bit instruction
@@ -329,6 +297,7 @@ void instDecExec(unsigned int instWord)
         else if (opcode == 0x17) { // AUIPC - U-Type
             cout << "\tAUIPC\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
         }
+
         else if (opcode == 0x63) {    // B instructions
             switch (funct3) {
             case 0:    cout << "\tBEQ\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
@@ -370,7 +339,7 @@ void instDecExec(unsigned int instWord)
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (1086686643);
+    instDecExec (11870899);
 
 
 
