@@ -11,6 +11,8 @@ unsigned int pc = 0x0;
 
 char memory[8*1024];	// only 8KB of memory located at address 0
 
+
+
 string convert3BitToABIName  (unsigned int binary) // a utility function that takes number of a regsiter and returns its ABI name, EX : 000 => s0
 {
     unordered_map<unsigned int, string> map;
@@ -300,17 +302,17 @@ void instDecExec(unsigned int instWord)
 
         else if (opcode == 0x63) {    // B instructions
             switch (funct3) {
-            case 0:    cout << "\tBEQ\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 0:    cout << "\tBEQ\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 1:    cout << "\tBNE\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 1:    cout << "\tBNE\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 4:    cout << "\tBLT\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 4:    cout << "\tBLT\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 5:    cout << "\tBGE\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 5:    cout << "\tBGE\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 6:    cout << "\tBLTU\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 6:    cout << "\tBLTU\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 7:   cout << "\tBGEU\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 7:   cout << "\tBGEU\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
             default:
                 cout << "\tUnkown Instruction \n";
@@ -347,7 +349,9 @@ void instDecExec(unsigned int instWord)
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (115);
+
+    cout<<endl<<int("0x1")<<endl;
+    instDecExec (1829374574);
 
 
 
