@@ -66,11 +66,11 @@ void instDecExec(unsigned int instWord)
 
 
     // â€” inst[31] â€” inst[30:25] inst[24:21] inst[20]
-    I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
-    U_imm = (instWord >> 12);
-    B_imm = ((instWord >> 25) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
-	S_imm= ((instWord >> 25) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
-	J_imm = ((instWord >> 12) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+    unsigned  int  I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+  unsigned  int   U_imm = (instWord >> 12);
+  unsigned  int   B_imm =(((instWord>>7) &1) <<10 ) + (((instWord >>8) &4)) + (((instWord >>25) &8)<<4) + (((instWord>>31) &1) <<11 ) ;
+ unsigned  int	S_imm= (((instWord >>7) &4))+ (((instWord >>25) &8)<<4);
+ unsigned  int J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11) + (((instWord>>31) &1 )<<19);
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
@@ -82,10 +82,10 @@ void instDecExec(unsigned int instWord)
             unsigned int immCI = ((instWord >> 2) & 31) + ( ((instWord >> 12) & 1) << 5);
             if (instructionType==2){
                 if (func3_16bit == 2 )
-                    cout << "\tC.LWSP \t" <<convert5bitToABIName(rd)<<endl;
+                    cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
                 
                 else if (func3_16bit == 6) //sp
-                cout << "\tC.SWSP \t" << convert5bitToABIName(rs2_C) <<endl;
+                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl; 
 
                 else if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
@@ -94,16 +94,16 @@ void instDecExec(unsigned int instWord)
 
                     {
                         if (!rs2_C)
-                            cout << "\tC.jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0\n" ;
+                            cout << "jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
                         else
-                            cout << "\tC.MV\tx0, " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1)<<endl ;
+                            cout << "MV  \tx0, " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1) ;
                     }
 
                     else  { //C.jalr
-                        if ( !rs2_C && !rd ) cout<<"\tC.EBREAK\n";
+                        if ( !rs2_C && !rd ) cout<<"EBREAK\n";
                         else if (!rs2_C)
-                             cout << "\tC.jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0\n" ;
-                        else cout << "\tADD \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C)<<endl;
+                             cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        else cout << "ADD \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C);
                     }
 
 
@@ -111,9 +111,8 @@ void instDecExec(unsigned int instWord)
                 else if (func3_16bit==0){
                     // slli
                     unsigned int dest = (instWord >>7) & 31;
-                    cout << "\tC.SLLI\t" << convert5bitToABIName(dest) << " ,    " << immCI<<endl;
+                    cout << "C.SLLI\t" << convert5bitToABIName(dest) << " ,    " << immCI;
                 }
-                else cout<<"Unknown Instruction \n";
         }
 
         else if (instructionType ==0){  //Register-Based Loads and Stores format
@@ -121,12 +120,12 @@ void instDecExec(unsigned int instWord)
             unsigned int rs16bit = (instWord >>7) & 7;
             unsigned int offset = (((instWord >>10) &7 ) <<1) + (((instWord >>5) & 1 )<<4) + ((instWord >>6) & 1) ;
             unsigned int imm_CIW = (instWord >> 5) & 0xFF;
-            if (func3_16bit==2) cout << "\tC.LW\t" << convert3BitToABIName(rd16bit) << "\t" << int (offset )<< "(" << convert3BitToABIName(
+            if (func3_16bit==2) cout << "C.LW\t" << convert3BitToABIName(rd16bit) << "\t" << int (offset )<< "(" << convert3BitToABIName(
                         rs16bit) << ")\n";
-            else if (func3_16bit==6) cout << "\tC.SW\t" << convert3BitToABIName(rd16bit) << "\t" << int (offset )<< "(" << convert3BitToABIName(
+            else if (func3_16bit==6) cout << "C.SW\t" << convert3BitToABIName(rd16bit) << "\t" << int (offset )<< "(" << convert3BitToABIName(
                         rs16bit) << ")\n";
             else if (func3_16bit == 0) // CIW format
-                cout << "\tC.ADDI4SPN\t" << convert3BitToABIName(rd16bit) << ",\t" <<int( imm_CIW )<< ")\n";
+                cout << "C.ADDI4SPN\t" << convert3BitToABIName(rd16bit) << ",\t" <<int( imm_CIW )<< ")\n";
             else cout << "not supported register based load/store format-RVC";
         }
         else { //instructionType ==1  // control instructions
@@ -137,53 +136,44 @@ void instDecExec(unsigned int instWord)
 
             if (func3_16bit==5){ // CJ format
                 // C.J
-                cout << "\tC.j\t " << int (immCJ) << "\n";
+                cout << "C.j\t " << int (immCJ) << "\n";
             }
             else if (func3_16bit==1) { // CJ format
                 // c.jal // saves pc+2 to ra =>x1
-                cout << "\tc.jal , " << int (immCJ) << "\n";
+                cout << "c.jal , " << int (immCJ) << "\n";
             }
             else if (func3_16bit==6) { //CB format
                 // C.BEQZ
 //                cout << "beq\t" << convert3BitToABIName(CBrs1) << ",  x0 , " << CBimm << "\n";
-                cout << "\tc.beqz\t" << convert3BitToABIName(CBrs1) << ",  " << int (CBimm )<< "\n";
+                cout << "c.beqz\t" << convert3BitToABIName(CBrs1) << ",  " << int (CBimm )<< "\n";
 
             }
             else if (func3_16bit==7) { // CB format
                 // C.bnez
-                cout << "\tc.bnez\t" << convert3BitToABIName(CBrs1) << " , " << int(CBimm) << "\n";
+                cout << "c.bnez\t" << convert3BitToABIName(CBrs1) << " , " << int(CBimm) << "\n";
 //                cout << "bne\t" << convert3BitToABIName(CBrs1) << ",  " << CBimm << "\n";
             }
             else if (func3_16bit ==2){  //CI
                 // C.LI
-                cout << "\tC.LI\t " << convert5bitToABIName(CBrs1) << ",    " << int (immCI )<< "\n" ;
+                cout << "C.LI\t " << convert5bitToABIName(CBrs1) << ",    " << int (immCI )<< "\b" ;
             }
             else if (func3_16bit == 3){
-                if ( rd == 2)
-                    // C.ADDI16SP;
-                    cout<<"C.ADDI16SP";
-                else
-                {
-                    unsigned int  nzimm =  ((instWord>>2)&0x01F)+((instWord>>12)&1);
-                    cout << "C.LUI\t " << convert5bitToABIName(rd) << ",    " << nzimm << "\b" ;
-
-                }
-
+                //C.lui
             }
             else if (func3_16bit==4){ // checking for func 2
                 CBrs1 = CBrs1 & 7;  // removing the most two significant bits coz they are for func2
 
                 if (func2==0) { // CI
                     //SRLI
-                    cout << "\tC.SRLI\t" << convert3BitToABIName(CBrs1) << ",   " << int (immCI )<< "\n";
+                    cout << "C.SRLI\t" << convert3BitToABIName(CBrs1) << ",   " << int (immCI )<< "\n";
                 }
                 else if (func2==1){ // CI
                     // SRAI
-                    cout << "\tC.SRAI\t" << convert3BitToABIName(CBrs1) << ",   " << int(immCI) << "\n";
+                    cout << "C.SRAI\t" << convert3BitToABIName(CBrs1) << ",   " << int(immCI) << "\n";
                 }
                 else if (func2==2){ //CI
                     //ANDI
-                    cout << "\tC.ANDI\t" << convert3BitToABIName(CBrs1) << ",   " << int(immCI) << "\n";
+                    cout << "C.ANDI\t" << convert3BitToABIName(CBrs1) << ",   " << int(immCI) << "\n";
                 }
                 // CR
                 else if (func2==3 ){ // func2 = 3
@@ -194,16 +184,16 @@ void instDecExec(unsigned int instWord)
                         unsigned  int rd_CR = (instWord>>7)&7;
                         unsigned  int rs2_CR = (instWord>>2)&7;
                         if (CRfunc22==0){
-                            cout << "\tC.SUB\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                            cout << "C.SUB\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
                         }
                         else if (CRfunc22==1){
-                            cout << "\tC.XOR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                            cout << "C.XOR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
                         }
                         else if (CRfunc22==2){
-                            cout << "\tC.OR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                            cout << "C.OR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
                         }
                         else if (CRfunc22==3){
-                            cout << "\tC.AND\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                            cout << "C.AND\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
                         }
 
                     }
@@ -212,10 +202,10 @@ void instDecExec(unsigned int instWord)
                         unsigned  int rd_CR = (instWord>>7)&7;
                         unsigned  int rs2_CR = (instWord>>2)&7;
                         if (CRfunc22==0){
-                            cout << "\tC.SUBW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                            cout << "C.SUBW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
                         }
                         else if (CRfunc22==1){
-                            cout << "\tC.ADDW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                            cout << "C.ADDW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
                         }
 
 
@@ -225,7 +215,6 @@ void instDecExec(unsigned int instWord)
 
             }
 
-            else cout<<"Unknown Instruction \n";
 
         }
 
@@ -276,7 +265,7 @@ void instDecExec(unsigned int instWord)
                         cout << "\tAND\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
                         break;
                     default:
-                        cout << "\tUnknown Instruction \n";
+                        cout << "\tUnkown Instruction \n";
                 }
             }
         else if (opcode == 0x13) {    // I instructions
@@ -307,7 +296,7 @@ void instDecExec(unsigned int instWord)
             case 7:    cout << "\tANDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << int(I_imm )<< "\n";
                 break;
             default:
-                cout << "\tUnknown I Instruction \n";
+                cout << "\tUnkown I Instruction \n";
             }
         }
         else if (opcode == 0x3) { // I-Type
@@ -322,8 +311,6 @@ void instDecExec(unsigned int instWord)
                 break;
             case 5:    cout << "\tLHU\t " << convert5bitToABIName(rd) << ", " << int(I_imm ) << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
-            default:
-                    cout << "\tUnknown I Instruction \n";
             }
         }
         else if (opcode == 0x67) { // JALR I-Type
@@ -351,7 +338,7 @@ void instDecExec(unsigned int instWord)
             case 7:   cout << "\tBGEU\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << int(B_imm) << "\n";
                 break;
             default:
-                cout << "\tUnknown Instruction \n";
+                cout << "\tUnkown Instruction \n";
              }
          }
         else if  (opcode == 0x23) {    // S instructions
@@ -363,7 +350,7 @@ void instDecExec(unsigned int instWord)
             case 2:    cout << "\tSW\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "," << int(S_imm) << "\n";
                 break;
             default:
-                cout << "\tUnknown Instruction \n";
+                cout << "\tUnkown Instruction \n";
             }
         }
         else if (opcode == 0x6F) //jal
@@ -378,8 +365,6 @@ void instDecExec(unsigned int instWord)
             else cout<< "\tebreak\n";
 
         }
-
-            else cout<<"Unknown Instruction \n";
     }
 
 }
@@ -390,7 +375,7 @@ int main (int argc, char *argv [] ){
     unsigned int instWord=0;
     ifstream inFile;
     ofstream outFile;
-    argv[1]= "../samples_2/parr_comp.bin";
+    argv[1]= "../samples/div.bin";
 //    cout << argc << "\n";
 //    if(argc<2) {
 //        emitError("use: rvcdiss <machine_code_file_name>\n");
