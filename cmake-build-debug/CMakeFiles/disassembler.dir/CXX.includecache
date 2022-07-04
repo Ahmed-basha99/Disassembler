@@ -6,7 +6,11 @@
 
 #IncludeRegexTransform: 
 
+<<<<<<< HEAD
+C:/Users/ahmed/CLionProjects/disassembler/main.cpp
+=======
 C:/Users/Mokhtar/CLionProjects/Disassembler/main.cpp
+>>>>>>> 917f3277e5982583721f9a746f99a2c466a1b413
 iostream
 -
 unordered_map
