@@ -11,6 +11,8 @@ unsigned int pc = 0x0;
 
 char memory[8*1024];	// only 8KB of memory located at address 0
 
+
+
 string convert3BitToABIName  (unsigned int binary) // a utility function that takes number of a regsiter and returns its ABI name, EX : 000 => s0
 {
     unordered_map<unsigned int, string> map;
@@ -192,8 +194,8 @@ void instDecExec(unsigned int instWord)
 
 
         }
-      
-                     
+
+
 
     }
     else {  // 32 bit instruction
@@ -298,26 +300,25 @@ void instDecExec(unsigned int instWord)
             cout << "\tAUIPC\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
         }
 
-
         else if (opcode == 0x63) {    // B instructions
             switch (funct3) {
-            case 0:    cout << "\tBEQ\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 0:    cout << "\tBEQ\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 1:    cout << "\tBNE\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 1:    cout << "\tBNE\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 4:    cout << "\tBLT\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 4:    cout << "\tBLT\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 5:    cout << "\tBGE\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 5:    cout << "\tBGE\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 6:    cout << "\tBLTU\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 6:    cout << "\tBLTU\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
-            case 7:   cout << "\tBGEU\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
+            case 7:   cout << "\tBGEU\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
             default:
                 cout << "\tUnkown Instruction \n";
              }
          }
-         else if  (opcode == 0x23) {    // S instructions 
+        else if  (opcode == 0x23) {    // S instructions
             switch (funct3) {
             case 0:    cout << "\tSB\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ", " << hex << "0x" << (int)S_imm << "\n";
                 break;
@@ -326,36 +327,28 @@ void instDecExec(unsigned int instWord)
             case 2:    cout << "\tSW\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "," << hex << "0x" << (int)S_imm << "\n";
                 break;
             default:
-                cout << "\tUnkown Instruction _ S \n";
+                cout << "\tUnkown Instruction \n";
             }
         }
-         else if (opcode == 0x6F) //jal
-             {
-             cout << "\tJAL\tx" << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)J_imm << "\n"; // how to seperate el int
-             }
+        else if (opcode == 0x6F) //jal
+            {
+                cout << "\tJAL\t" << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)J_imm << "\n"; // how to seperate el int
+            }
 
-         else {
-             cout << "\tUnkown Instruction \n";
-         }
+        else if ( opcode== 0x73){
+
+            unsigned int rest = (instWord>>7);
+            if (!rest) cout<<"\tecall\n";
+            else cout<< "\tebreak\n";
+
+        }
     }
 
 }
 
 
-
-
-
-//int main (){
-//    ifstream inFile ("../mult1.bin", ios::in | ios::binary | ios::ate);
-//
-//
-//    if (!inFile.is_open()) cout <<" not open";
-//    else puts("open");
-//
-//}
-
-int main(int argc, char *argv[]){
-
+int main (int argc, char *argv [] ){
+    unsigned  int input = 23912;
     unsigned int instWord=0;
     ifstream inFile;
     ofstream outFile;
@@ -389,10 +382,9 @@ int main(int argc, char *argv[]){
 //                break;			// stop when PC reached address 32
 //            }
         }
-    } else emitError("Cannot access input file\n");
+    }
+    else emitError("Cannot access input file\n");
 
     return 0;
 }
-
-
 
