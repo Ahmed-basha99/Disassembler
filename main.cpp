@@ -73,7 +73,7 @@ void instDecExec(unsigned int instWord)
  S_imm = S_imm | rd;
 
 
- J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11) + (((instWord>>31) &1 )<<19);
+ J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11);
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
@@ -83,12 +83,14 @@ void instDecExec(unsigned int instWord)
             unsigned int func3_16bit = (instWord >>13) &  7;
             unsigned int func2 = (instWord >> 10)  &3;
             unsigned int immCI = ((instWord >> 2) & 31) + ( ((instWord >> 12) & 1) << 5);
+            unsigned int l_imm (((instWord >> 2) & 3) << 5) + (((instWord >> 4 ) & 4) << 1) + (((instWord >> 7) & 1) << 4)
+            unsigned int ss_imm(((instWord >> 7) & 3) << 5) + (((instWord >> 9) & 5) << 1)
             if (instructionType==2){
                 if (func3_16bit == 2 )
-                    cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
+                    cout << "C.LWSP \t" <<convert5bitToABIName(rd)<< int(l_imm) << "\n";
                 
                 else if (func3_16bit == 6) //sp
-                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl; 
+                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) << int(ss_imm) << "\n";
 
                 else if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
@@ -359,7 +361,7 @@ void instDecExec(unsigned int instWord)
         }
         else if (opcode == 0x6F) //jal
             {
-                cout << "JAL\t" << convert5bitToABIName(rd) << ", " << int(J_imm) << "\n"; // how to seperate el int
+                cout << "JAL\t" << convert5bitToABIName(rd) << ", " << int(J_imm) << "\n"; 
             }
 
         else if ( opcode== 0x73){
