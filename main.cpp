@@ -232,9 +232,9 @@ void instDecExec(unsigned int instWord)
                 break;
             case 2:    cout << "\tLW\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
-            case 3:    cout << "\tLBU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+            case 4:    cout << "\tLBU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
-            case 4:    cout << "\tLHU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
+            case 5:    cout << "\tLHU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
             }
         }
@@ -244,7 +244,7 @@ void instDecExec(unsigned int instWord)
         else if (opcode == 0x37) { // LUI U-Type
             cout << "\tLUI\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
         }
-        else if (opcode == 0x17) { // AUIC - U-Type
+        else if (opcode == 0x17) { // AUIPC - U-Type
             cout << "\tAUIPC\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)U_imm << "\n";
         }
         else {
