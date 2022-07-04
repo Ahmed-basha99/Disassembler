@@ -79,7 +79,12 @@ void instDecExec(unsigned int instWord)
                 else if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 31 ;  // still need to decode this
                     // C.jr
-                    if (!func4_extraBitForCR) cout << "jalr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                    if (!func4_extraBitForCR)
+
+                    {
+
+                       cout << "jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                    }
 
                     else  { //C.jalr
 
