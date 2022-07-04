@@ -208,17 +208,7 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-<<<<<<< HEAD
-MyProject_BINARY_DIR:STATIC=C:/Users/ahmed/CLionProjects/disassembler/cmake-build-debug
-
-//Value Computed by CMake
-MyProject_SOURCE_DIR:STATIC=C:/Users/ahmed/CLionProjects/disassembler
-
-//Value Computed by CMake
-disassembler_BINARY_DIR:STATIC=C:/Users/ahmed/CLionProjects/disassembler/cmake-build-debug
-=======
 disassembler_BINARY_DIR:STATIC=C:/Users/Mokhtar/CLionProjects/Disassembler/cmake-build-debug
->>>>>>> e925f431d378625d224a9e7daaff4af9e5080a9c
 
 //Value Computed by CMake
 disassembler_SOURCE_DIR:STATIC=C:/Users/Mokhtar/CLionProjects/Disassembler
