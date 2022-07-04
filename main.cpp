@@ -73,7 +73,7 @@ void instDecExec(unsigned int instWord)
  S_imm = S_imm | rd;
 
 
- J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11) + (((instWord>>31) &1 )<<19);
+ J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11);
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
@@ -361,7 +361,7 @@ void instDecExec(unsigned int instWord)
         }
         else if (opcode == 0x6F) //jal
             {
-                cout << "JAL\t" << convert5bitToABIName(rd) << ", " << int(J_imm) << "\n"; // how to seperate el int
+                cout << "JAL\t" << convert5bitToABIName(rd) << ", " << int(J_imm) << "\n"; 
             }
 
         else if ( opcode== 0x73){
