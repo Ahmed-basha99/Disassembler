@@ -83,12 +83,14 @@ void instDecExec(unsigned int instWord)
             unsigned int func3_16bit = (instWord >>13) &  7;
             unsigned int func2 = (instWord >> 10)  &3;
             unsigned int immCI = ((instWord >> 2) & 31) + ( ((instWord >> 12) & 1) << 5);
+            unsigned int l_imm (((instWord >> 2) & 3) << 5) + (((instWord >> 4 ) & 4) << 1) + (((instWord >> 7) & 1) << 4)
+            unsigned int ss_imm(((instWord >> 7) & 3) << 5) + (((instWord >> 9) & 5) << 1)
             if (instructionType==2){
                 if (func3_16bit == 2 )
-                    cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
+                    cout << "C.LWSP \t" <<convert5bitToABIName(rd)<< int(l_imm) << "\n";
                 
                 else if (func3_16bit == 6) //sp
-                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl; 
+                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) << int(ss_imm) << "\n";
 
                 else if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
