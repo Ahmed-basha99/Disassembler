@@ -4,7 +4,6 @@
 #include "stdlib.h"
 #include <iomanip>
 #include <iostream>
-
 using namespace std;
 
 unsigned int pc = 0x0;
@@ -68,7 +67,12 @@ void instDecExec(unsigned int instWord)
     // â€” inst[31] â€” inst[30:25] inst[24:21] inst[20]
  I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
  U_imm = (instWord >> 12);
- B_imm =(((instWord>>7) &1) <<10 ) + (((instWord >>8) &4)) + (((instWord >>25) &8)<<4) + (((instWord>>31) &1) <<11 ) ;
+ unsigned int b_11, b_12, b_r, b_s;
+ b_12 = ((instWord >> 31) & 1) << 11;
+ b_11 = ((instWord >> 7) & 1) << 10;
+ b_r = (instWord >> 8) & 0xF;
+ b_s = ((instWord >> 25) & 0x3F) << 4;
+ B_imm = (b_12 | b_11 | b_s | b_r) << 1;
 
  S_imm = (instWord >> 25);
  S_imm = ((instWord << 5) & 0x1F);
