@@ -1,0 +1,4 @@
+# ninja log v5
+1	2040	6786747201736352	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
+2041	3796	6786747215699951	disassembler.exe	2f1602695aca8b7a
+20	966	6786747876809925	build.ninja	7e7d9cfe19f0dab9

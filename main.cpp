@@ -49,7 +49,7 @@ void printPrefix(unsigned int instA, unsigned int instW){
 void instDecExec(unsigned int instWord)
 {
     unsigned int rd, rs1, rs2,rs2_C, funct3, funct7, opcode;
-
+    unsigned int I_imm, B_imm, S_imm, U_imm, J_imm;
     unsigned int address;
 
     unsigned int instPC = pc - 4;
@@ -64,11 +64,16 @@ void instDecExec(unsigned int instWord)
     shamt = (instWord >> 20) & 0x0000001F;
 
 
-    unsigned  int  I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
-  unsigned  int   U_imm = (instWord >> 12);
-  unsigned  int   B_imm =(((instWord>>7) &1) <<10 ) + (((instWord >>8) &4)) + (((instWord >>25) &8)<<4) + (((instWord>>31) &1) <<11 ) ;
- unsigned  int	S_imm= (((instWord >>7) &4))+ (((instWord >>25) &8)<<4);
- unsigned  int J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11) + (((instWord>>31) &1 )<<19);
+ I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+ U_imm = (instWord >> 12);
+ B_imm =(((instWord>>7) &1) <<10 ) + (((instWord >>8) &4)) + (((instWord >>25) &8)<<4) + (((instWord>>31) &1) <<11 ) ;
+
+ S_imm = (instWord >> 25);
+ S_imm = ((instWord << 5) & 0x1F);
+ S_imm = S_imm | rd;
+
+
+ J_imm = (((instWord >>21 )&2047)) + (((instWord>>20) &1 )<<10) + (((instWord >>12)&511)<<11) + (((instWord>>31) &1 )<<19);
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
@@ -342,11 +347,11 @@ void instDecExec(unsigned int instWord)
          }
         else if  (opcode == 0x23) {    // S instructions
             switch (funct3) {
-            case 0:    cout << "\tSB\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ", " <<int(S_imm) << "\n";
+            case 0:    cout << "\tSB\t" << convert5bitToABIName(rs2) << hex << ", " << (int)S_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
-            case 1:    cout << "\tSH\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ", " << int(S_imm) << "\n";
+            case 1:    cout << "\tSH\t" << convert5bitToABIName(rs2) << hex << ", " << (int)S_imm << ", " << hex << "0x" << convert5bitToABIName(rs1) << "\n";
                 break;
-            case 2:    cout << "\tSW\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "," << int(S_imm) << "\n";
+            case 2:    cout << "\tSW\t" << convert5bitToABIName(rs2) << hex << ", " << (int)S_imm << "," << hex << "0x" << convert5bitToABIName(rs1) << "\n";
                 break;
             default:
                 cout << "\tUnkown Instruction \n";
