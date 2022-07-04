@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/Mokhtar/CLionProjects/Disassembler/main.cpp
+C:/Users/ahmed/CLionProjects/disassembler/main.cpp
 iostream
 -
 unordered_map
@@ -14,7 +14,7 @@ unordered_map
 fstream
 -
 stdlib.h
-C:/Users/Mokhtar/CLionProjects/Disassembler/stdlib.h
+C:/Users/ahmed/CLionProjects/disassembler/stdlib.h
 iomanip
 -
 iostream
