@@ -22,7 +22,6 @@ string convert3BitToABIName  (unsigned int binary) // a utility function that ta
 }
 string convert5bitToABIName (unsigned int binary){
 
-    cout << binary << "\t";
     unordered_map<unsigned int ,string> map;
     map[0]= "zero"; map[1]= "ra";  map[2]= "sp"; map[3] = "gp";
     map[4]= "tp"; map[5]= "t0";  map[6]= "t1"; map[7] = "t2";
@@ -86,11 +85,11 @@ void instDecExec(unsigned int instWord)
             if (instructionType==2){
                 if (func3_16bit == 2 )
                     cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
-                
-                else if (func3_16bit == 6) //sp
-                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl; 
 
-                else if (func3_16bit== 4) {                // CR format
+                else if (func3_16bit == 6) //sp
+                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl;
+
+                 if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
                     // C.jr
                     if (!func4_extraBitForCR)
@@ -106,7 +105,7 @@ void instDecExec(unsigned int instWord)
                         if ( !rs2_C && !rd ) cout<<"EBREAK\n";
                         else if (!rs2_C)
                              cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0" ;
-                        else cout << "ADD \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C);
+                        else cout << "ADD \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C) << "\n";
                     }
 
 
@@ -372,7 +371,6 @@ void instDecExec(unsigned int instWord)
     }
 
 }
-
 
 int main (int argc, char *argv [] ){
 //    instDecExec(4895); return 0;
