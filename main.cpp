@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <unordered_map>
 #include <fstream>
@@ -20,6 +19,8 @@ string convert3BitToABIName  (unsigned int binary) // a utility function that ta
     return map[binary];
 }
 string convert5bitToABIName (unsigned int binary){
+
+
     unordered_map<unsigned int ,string> map;
     map[0]= "zero"; map[1]= "ra";  map[2]= "sp"; map[3] = "gp";
     map[4]= "tp"; map[5]= "t0";  map[6]= "t1"; map[7] = "t2";
@@ -55,6 +56,7 @@ void instDecExec(unsigned int instWord)
     opcode = instWord & 0x0000007F;
     rd = (instWord >> 7) & 0x0000001F;
     funct3 = (instWord >> 12) & 0x00000007;
+    funct7 = (instWord >> 25) & 0x00007F;
     rs1 = (instWord >> 15) & 0x0000001F;
     rs2 = (instWord >> 20) & 0x0000001F;
     rs2_C =(instWord >> 2) & 0x0000001F;
@@ -67,7 +69,7 @@ void instDecExec(unsigned int instWord)
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
-cout<<instructionType<<endl;
+
         if (instructionType!=3) { // 16 bit instruction
             unsigned int func4_extraBitForCR = (instWord>>12) &1;
             unsigned int func3_16bit = (instWord >>13) &  7;
@@ -192,40 +194,52 @@ cout<<instructionType<<endl;
     else {  // 32 bit instruction
             if(opcode == 0x33){		// R Instructions
 
-                cout<<funct3<<"DFV\n";
+
 
                 switch(funct3){
-                    case 0: if(funct7 == 32) {
-                            cout << "\tSUB\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                    case 0:
+                        {
+                            if(funct7 == 32) {
+                                cout << "\tSUB\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
+                            }
+                            else {
+                                cout << "\tADD\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
+                            }
+                            break;
+
+                        }
+                    case 1:
+                        cout << "\tSLL\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
+                        break;
+                    case 2:
+                        cout << "\tSLT\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
+                        break;
+                    case 3:
+                        cout << "\tSLTU\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
+                        break;
+                    case 4:
+                        cout << "\tXOR\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
+                        break;
+                    case 5:
+                        if(funct7 == 32) {
+                            cout << "\tSRA\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
                         }
                         else {
-                            cout << "\tADD\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                            cout << "\tSRL\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
                         }
                         break;
-                    case 1: cout << "\tSLL\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                    case 6:
+                        cout << "\tOR\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
                         break;
-                    case 2:  cout << "\tSLT\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                        break;
-                    case 3:  cout << "\tSLTU\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                        break;
-                    case 4:  cout << "\tXOR\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                        break;
-                    case 5:  if(funct7 == 32) {
-                            cout << "\tSRA\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                        }
-                        else {
-                            cout << "\tSRL\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                        }
-                        break;
-                    case 6:  cout << "\tOR\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
-                        break;
-                    case 7:  cout << "\tAND\tx" << rd << ", x" << rs1 << ", x" << rs2 << "\n";
+                    case 7:
+                        cout << "\tAND\t" << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << "\n";
                         break;
                     default:
                         cout << "\tUnkown Instruction \n";
                 }
             }
         else if (opcode == 0x13) {    // I instructions
+
             switch (funct3) {
             case 0:    cout << "\tADDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << hex << "0x" << (int)I_imm << "\n";
                 break;
@@ -292,7 +306,7 @@ cout<<instructionType<<endl;
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (37650);
+    instDecExec (1086686643);
 
 
 
