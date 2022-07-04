@@ -1,13 +1,4 @@
 # ninja log v5
-1	857	6786713164175944	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
-859	1736	6786713171795575	disassembler.exe	2f1602695aca8b7a
-1	947	6786714113103480	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
-949	1388	6786714116540167	disassembler.exe	2f1602695aca8b7a
-1	763	6786716857998240	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
-764	1260	6786716861591086	disassembler.exe	2f1602695aca8b7a
-1	911	6786718019136906	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
-913	1323	6786718021948760	disassembler.exe	2f1602695aca8b7a
-1	1110	6786718223267495	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
-1111	1643	6786718227173003	disassembler.exe	2f1602695aca8b7a
-1	835	6786721236432534	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
-836	1448	6786721241355988	disassembler.exe	2f1602695aca8b7a
+1	2040	6786747201736352	CMakeFiles/disassembler.dir/main.cpp.obj	7ce33d79c655585f
+2041	3796	6786747215699951	disassembler.exe	2f1602695aca8b7a
+20	966	6786747876809925	build.ninja	7e7d9cfe19f0dab9

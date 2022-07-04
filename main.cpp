@@ -49,7 +49,7 @@ void printPrefix(unsigned int instA, unsigned int instW){
 void instDecExec(unsigned int instWord)
 {
     unsigned int rd, rs1, rs2,rs2_C, funct3, funct7, opcode;
-
+    unsigned int I_imm, B_imm, S_imm, U_imm, J_imm;
     unsigned int address;
 
     unsigned int instPC = pc - 4;
