@@ -49,7 +49,7 @@ void printPrefix(unsigned int instA, unsigned int instW){
 void instDecExec(unsigned int instWord)
 {
     unsigned int rd, rs1, rs2,rs2_C, funct3, funct7, opcode;
-    unsigned int I_imm, S_imm, B_imm, U_imm, J_imm;
+
     unsigned int address;
 
     unsigned int instPC = pc - 4;
@@ -101,7 +101,7 @@ void instDecExec(unsigned int instWord)
                         if (!rs2_C)
                             cout << "jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
                         else
-                            cout << "MV  \tx0, " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1) ;
+                            cout << "MV  \tx0, " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1) << "\n";
                     }
 
                     else  { //C.jalr
@@ -116,7 +116,7 @@ void instDecExec(unsigned int instWord)
                 else if (func3_16bit==0){
                     // slli
                     unsigned int dest = (instWord >>7) & 31;
-                    cout << "C.SLLI\t" << convert5bitToABIName(dest) << " ,    " << immCI;
+                    cout << "C.SLLI\t" << convert5bitToABIName(dest) << " ,    " << immCI << "\n";
                 }
         }
 
@@ -376,11 +376,12 @@ void instDecExec(unsigned int instWord)
 
 
 int main (int argc, char *argv [] ){
+
     unsigned  int input = 23912;
     unsigned int instWord=0;
     ifstream inFile;
     ofstream outFile;
-    argv[1]= "../samples/div.bin";
+    argv[1]= "../samples_2/fib_comp.bin";
 //    cout << argc << "\n";
 //    if(argc<2) {
 //        emitError("use: rvcdiss <machine_code_file_name>\n");
@@ -397,13 +398,26 @@ int main (int argc, char *argv [] ){
         while(pc<fsize){
             // 2 pm
             instWord = 	(unsigned char)memory[pc] |
-                    (((unsigned char)memory[pc+1])<<8) |
-                    (((unsigned char)memory[pc+2])<<16) |
-                    (((unsigned char)memory[pc+3])<<24);
-            pc += 4;
-            cout << instWord << "\t";
+                    (((unsigned char)memory[pc+1])<<8) ;
+
+            if ((instWord & 3 )!= 3) {
+                cout << instWord << "\t";
+                instDecExec(instWord);
+                pc+=2;
+            }
+            else {
+                instWord = instWord |(((unsigned char)memory[pc+2])<<16) |
+                        (((unsigned char)memory[pc+3])<<24);
+
+                pc += 4;
+                cout << instWord << "\t";
+                instDecExec(instWord);
+                pc+=4;
+            }
+
+
+
 //            // remove the following line once you have a complete simulator
-            instDecExec(instWord);
 
 //            if(pc==40) {
 //                cout <<"break\n";

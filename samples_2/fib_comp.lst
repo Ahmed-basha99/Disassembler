@@ -6,11 +6,11 @@ Disassembly of section .text:
 
 00000000 <fib-0x1e>:
    0:	40000113          	li	sp,1024
-   4:	010e                	slli	sp,sp,0x3
+   4:	010e                slli	sp,sp,0x3  // was not read right
    6:	4895                	li	a7,5
    8:	00000073          	ecall
    c:	012000ef          	jal	ra,1e <fib>
-  10:	8546                	mv	a0,a7
+  10:	8546                	mv	a0,a7  // a7 not a0
   12:	4885                	li	a7,1
   14:	00000073          	ecall
   18:	48a9                	li	a7,10
