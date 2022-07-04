@@ -22,7 +22,7 @@ string convert3BitToABIName  (unsigned int binary) // a utility function that ta
 }
 string convert5bitToABIName (unsigned int binary){
 
-
+    cout << binary << "\t";
     unordered_map<unsigned int ,string> map;
     map[0]= "zero"; map[1]= "ra";  map[2]= "sp"; map[3] = "gp";
     map[4]= "tp"; map[5]= "t0";  map[6]= "t1"; map[7] = "t2";
@@ -54,7 +54,6 @@ void instDecExec(unsigned int instWord)
 
     unsigned int instPC = pc - 4;
     unsigned int shamt;
-
     opcode = instWord & 0x0000007F;
     rd = (instWord >> 7) & 0x0000001F;
     funct3 = (instWord >> 12) & 0x00000007;
@@ -65,7 +64,6 @@ void instDecExec(unsigned int instWord)
     shamt = (instWord >> 20) & 0x0000001F;
 
 
-    // â€” inst[31] â€” inst[30:25] inst[24:21] inst[20]
  I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
  U_imm = (instWord >> 12);
  B_imm =(((instWord>>7) &1) <<10 ) + (((instWord >>8) &4)) + (((instWord >>25) &8)<<4) + (((instWord>>31) &1) <<11 ) ;
@@ -160,7 +158,8 @@ void instDecExec(unsigned int instWord)
             }
             else if (func3_16bit ==2){  //CI
                 // C.LI
-                cout << "C.LI\t " << convert5bitToABIName(CBrs1) << ",    " << int (immCI )<< "\b" ;
+                unsigned  int rdcli = (instWord >> 7) & 31;
+                cout << "C.LI\t " << convert5bitToABIName(rdcli) << ",    " << int (immCI )<< "\n" ;
             }
             else if (func3_16bit == 3){
                 //C.lui
@@ -376,7 +375,7 @@ void instDecExec(unsigned int instWord)
 
 
 int main (int argc, char *argv [] ){
-
+//    instDecExec(4895); return 0;
     unsigned  int input = 23912;
     unsigned int instWord=0;
     ifstream inFile;
@@ -400,19 +399,20 @@ int main (int argc, char *argv [] ){
             instWord = 	(unsigned char)memory[pc] |
                     (((unsigned char)memory[pc+1])<<8) ;
 
-            if ((instWord & 3 )!= 3) {
-                cout << instWord << "\t";
+            if (((int)instWord & 3 )!= 3) {
+                cout <<hex<<( int)instWord << "  \t";
                 instDecExec(instWord);
                 pc+=2;
             }
             else {
-                instWord = instWord |(((unsigned char)memory[pc+2])<<16) |
+                instWord = (unsigned char)memory[pc] |
+                        (((unsigned char)memory[pc+1])<<8) |(((unsigned char)memory[pc+2])<<16) |
                         (((unsigned char)memory[pc+3])<<24);
 
                 pc += 4;
-                cout << instWord << "\t";
+                cout <<hex<<( int)instWord << "  \t";
                 instDecExec(instWord);
-                pc+=4;
+
             }
 
 
