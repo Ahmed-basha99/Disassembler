@@ -279,9 +279,12 @@ void instDecExec(unsigned int instWord)
                 break;
             case 3:    cout << "\tLBU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
+
+
             case 4:    cout << "\tLHU\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
                 break;
             }
+
         }
         else if (opcode == 0x67) { // JALR I-Type
             cout << "\tJALR\t " << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)I_imm << "(" << convert5bitToABIName(rs1) << ")" << "\n";
@@ -306,9 +309,10 @@ void instDecExec(unsigned int instWord)
 
 int main (){
     unsigned  int input = 23912;
-    instDecExec (1086686643);
 
 
+
+    instDecExec (23);
 
 }
 
