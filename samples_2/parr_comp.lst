@@ -5,7 +5,7 @@ a.out:     file format elf32-littleriscv
 Disassembly of section .text:
 
 00000000 <main>:
-   0:	40000693          	li	a3,1024
+       0:	40000693          	li	a3,1024
    4:	4281                	li	t0,0
    6:	4311                	li	t1,4
 
