@@ -78,6 +78,9 @@ void instDecExec(unsigned int instWord)
             if (instructionType==2){
                 if (func3_16bit == 2 )
                     cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
+                
+                else if (func3_16bit == 6) //sp
+                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl; 
 
                 else if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
@@ -189,9 +192,8 @@ void instDecExec(unsigned int instWord)
 
 
         }
-            else if (instructionType ==2)
-                if (func3_16bit == 6) //sp
-                cout << "\tSWSP\tx" << convert5bitToABIName(rs2_C) << ", "  << hex << "0x" << (int)SCimm << "\n";       
+      
+                     
 
     }
     else {  // 32 bit instruction
