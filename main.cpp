@@ -70,7 +70,7 @@ void instDecExec(unsigned int instWord)
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
 
-    if (instructionType!=3) { // 16 bit instruction
+        if (instructionType!=3) { // 16 bit instruction
             unsigned int func4_extraBitForCR = (instWord>>12) &1;
             unsigned int func3_16bit = (instWord >>13) &  7;
             unsigned int func2 = (instWord >> 10)  &3;
@@ -78,6 +78,9 @@ void instDecExec(unsigned int instWord)
             if (instructionType==2){
                 if (func3_16bit == 2 )
                     cout << "C.LWSP \t" <<convert5bitToABIName(rd)<<endl;
+                
+                else if (func3_16bit == 6) //sp
+                cout << "C.SWSP \t" << convert5bitToABIName(rs2_C) <<endl; 
 
                 else if (func3_16bit== 4) {                // CR format
                     unsigned int CrRS1 = (instWord >>7) & 0x0000001F ;  // still need to decode this
@@ -150,10 +153,7 @@ void instDecExec(unsigned int instWord)
                 cout << "C.LI\t " << convert5bitToABIName(CBrs1) << ",    " << immCI << "\b" ;
             }
             else if (func3_16bit == 3){
-
-                if (rd!= 2 && rd!= 0)
-                    cout << "C.LUI\t " << convert5bitToABIName(rd) << ",    " << immCI << "\b" ;
-
+                //C.lui
             }
             else if (func3_16bit==4){ // checking for func 2
                 CBrs1 = CBrs1 & 7;  // removing the most two significant bits coz they are for func2
@@ -192,12 +192,11 @@ void instDecExec(unsigned int instWord)
 
 
         }
-            else if (instructionType ==2)
-                if (func3_16bit == 6) //sp
-                cout << "\tSWSP\tx" << convert5bitToABIName(rs2_C) << ", "  << hex << "0x" << (int)SCimm << "\n";
+      
+                     
 
     }
-        else {  // 32 bit instruction
+    else {  // 32 bit instruction
             if(opcode == 0x33){		// R Instructions
 
 
@@ -301,7 +300,7 @@ void instDecExec(unsigned int instWord)
         else {
             cout << "\tUnkown Instruction \n";
         }
-             else if (opcode == 0x13) {    // B instructions change opcode
+             else if (opcode == 0x63) {    // B instructions 
             switch (funct3) {
             case 0:    cout << "\tBEQ\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
@@ -319,7 +318,7 @@ void instDecExec(unsigned int instWord)
                 cout << "\tUnkown Instruction \n";
              }
          }
-         else if  (opcode == 0x13) {    // S instructions chnage opcode
+         else if  (opcode == 0x23) {    // S instructions 
             switch (funct3) {
             case 0:    cout << "\tSB\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ", " << hex << "0x" << (int)S_imm << "\n";
                 break;
@@ -332,7 +331,7 @@ void instDecExec(unsigned int instWord)
             }
         }
     }
-            else if (opcode == 0x) // add opcode
+            else if (opcode == 0x6F) //jal
             {
                 cout << "\tJAL\tx" << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)J_imm << "\n"; // how to seperate el int
             }
