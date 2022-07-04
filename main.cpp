@@ -298,7 +298,7 @@ void instDecExec(unsigned int instWord)
         else {
             cout << "\tUnkown Instruction \n";
         }
-             else if (opcode == 0x13) {    // B instructions change opcode
+             else if (opcode == 0x63) {    // B instructions 
             switch (funct3) {
             case 0:    cout << "\tBEQ\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << hex << "0x" << (int)B_imm << "\n";
                 break;
@@ -316,7 +316,7 @@ void instDecExec(unsigned int instWord)
                 cout << "\tUnkown Instruction \n";
              }
          }
-         else if  (opcode == 0x13) {    // S instructions chnage opcode
+         else if  (opcode == 0x23) {    // S instructions 
             switch (funct3) {
             case 0:    cout << "\tSB\tx" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ", " << hex << "0x" << (int)S_imm << "\n";
                 break;
@@ -329,7 +329,7 @@ void instDecExec(unsigned int instWord)
             }
         }
     }
-            else if (opcode == 0x) // add opcode
+            else if (opcode == 0x6F) //jal
             {
                 cout << "\tJAL\tx" << convert5bitToABIName(rd) << ", " << hex << "0x" << (int)J_imm << "\n"; // how to seperate el int
             }
