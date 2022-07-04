@@ -176,19 +176,39 @@ void instDecExec(unsigned int instWord)
                     cout << "C.ANDI\t" << convert3BitToABIName(CBrs1) << ",   " << immCI << "\n";
                 }
                 // CR
-                else if (func2==3 && func4_extraBitForCR==0){ // func2 = 3
+                else if (func2==3 ){ // func2 = 3
                     int CRfunc22 = (instWord >> 5)&3;
-                    if (CRfunc22==0){
-                        // C.SUB
+                    //unsigned int func4_extraBitForCR = (instWord>>12) &1;
+                    if (!func4_extraBitForCR)
+                    {
+                        unsigned  int rd_CR = (instWord>>7)&7;
+                        unsigned  int rs2_CR = (instWord>>2)&7;
+                        if (CRfunc22==0){
+                            cout << "C.SUB\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                        }
+                        else if (CRfunc22==1){
+                            cout << "C.XOR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                        }
+                        else if (CRfunc22==2){
+                            cout << "C.OR\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                        }
+                        else if (CRfunc22==3){
+                            cout << "C.AND\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                        }
+
                     }
-                    else if (CRfunc22==1){
-                        //C.XOR
-                    }
-                    else if (CRfunc22==2){
-                        //C.OR
-                    }
-                    else if (CRfunc22==3){
-                        // C.AND
+                    else{
+
+                        unsigned  int rd_CR = (instWord>>7)&7;
+                        unsigned  int rs2_CR = (instWord>>2)&7;
+                        if (CRfunc22==0){
+                            cout << "C.SUBW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                        }
+                        else if (CRfunc22==1){
+                            cout << "C.ADDW\t" << convert3BitToABIName(rd_CR) << ",   " << convert3BitToABIName(rs2_CR) << "\n";
+                        }
+
+
                     }
 
                 }

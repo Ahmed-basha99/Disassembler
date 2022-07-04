@@ -2,8 +2,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/disassembler.dir/main.cpp.obj"
   "disassembler.exe"
   "disassembler.exe.manifest"
+  "disassembler.lib"
   "disassembler.pdb"
-  "libdisassembler.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
