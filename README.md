@@ -5,10 +5,15 @@ Implementation:
   using"funct 3" which is used to identify each instruction, and rare case we use an additionalif statement to  differentiate the instructions down further using "funct 7"
   for R types for instance.
 Limitations and Known issues:
+  - The main issue or problem that we encountered was the immediate values, the offset wouldnt give us the result that was      expected. The 32 bit instructions ran smoothly but their were some errors in the 16 bit compressed format, other than that we didnt have any other complications. As for limitations t
 
 Contributions of each member:
 Mokhtar:
-  -
+  - R type (32bit)
+  - R forrmat (16 bit)
+  - Ebreak
+  - ecall
+  - Fixing erroes in the code.
 Ahmed:
   -
 Mark:
