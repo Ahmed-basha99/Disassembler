@@ -212,13 +212,13 @@ void instDecExec16bit (unsigned int instWord){ // the main func that will transl
 
 }
 
-void instDecExec32bit(unsigned int instWord)
+void instDecExec32bit(unsigned int instWord) // the main func that will translate the 32 bit codes
 {
+    // opernds that we will use to  determine the numbers of the ABI registers and offsets
     int tmp = ((int) instWord) ;
     unsigned int rd, rs1, rs2,rs2_C, funct3, funct7, opcode;
     unsigned int I_imm, B_imm, S_imm, U_imm, J_imm;
     unsigned int address;
-
     unsigned int instPC = pc - 4;
     unsigned int shamt;
     opcode = instWord & 0x0000007F;
@@ -231,12 +231,11 @@ void instDecExec32bit(unsigned int instWord)
     shamt = (instWord >> 20) & 0x0000001F;
 
 
- I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
- U_imm = ((instWord >> 12) &0x7FFFF ) |( ((instWord >>31) &1)?0xfff80000:0x0 );  ;
-B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | (((instWord>>8) &15)) | (((instWord >>25)&63)<<4)  ) <<1 ;
- S_imm = ((((instWord>>31)&1)?0xfffff800 : 0x0 ) | (((instWord>>25)&63) <<5 ) |(((instWord>>7)&31)));
-
- J_imm = ((((instWord>>31)&1)?0xfff80000:0x0) |(((instWord >>12)&255)<<11) | (((instWord>>20)&1) <<10) | (((instWord>>21)&1023))  )<<1 ;
+     I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+     U_imm = ((instWord >> 12) &0x7FFFF ) |( ((instWord >>31) &1)?0xfff80000:0x0 );  ;
+     B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | (((instWord>>8) &15)) | (((instWord >>25)&63)<<4)  ) <<1 ;
+     S_imm = ((((instWord>>31)&1)?0xfffff800 : 0x0 ) | (((instWord>>25)&63) <<5 ) |(((instWord>>7)&31)));
+     J_imm = ((((instWord>>31)&1)?0xfff80000:0x0) |(((instWord >>12)&255)<<11) | (((instWord>>20)&1) <<10) | (((instWord>>21)&1023))  )<<1 ;
 //    printPrefix(instPC, instWord);
 
 
@@ -244,8 +243,8 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
 
 
    // 32 bit instruction
-            if(opcode == 0x33){		// R Instructions
-
+            if(opcode == 0x33){	 //opcode == 011011	// R Instructions
+                /// switching on funct 3
                 switch(funct3){
                     case 0:
                         {
@@ -301,7 +300,7 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
                 break;
                 case 4:    cout << "\tXORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)(I_imm )<< "\n";
                 break;
-            case 5: {
+                case 5: {
                 if (((instWord >> 30) & 1) == 1) {
                     cout << "\tSRAI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)(shamt) << "\n";
                 }
@@ -309,13 +308,13 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
                     cout << "\tSRLI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<(int)(shamt )<< "\n";
                 }
 
-            }
+                      }
                   break;
-            case 6:    cout << "\tORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<(int)(I_imm) << "\n";
+                case 6:    cout << "\tORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<(int)(I_imm) << "\n";
                 break;
                 case 7:    cout << "\tANDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)(I_imm )<< "\n";
                 break;
-            default:
+                default:
                 cout << "\tUnkown I Instruction \n";
             }
         }
@@ -357,7 +356,7 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
                 break;
                 case 7:   cout << "BGEU\t" << convert5bitToABIName(rs1) << ", " << convert5bitToABIName(rs2) << ",  " << (int)(B_imm) +pc << "\n";
                 break;
-            default:
+                default:
                 cout << "\tUnkown Instruction \n";
              }
          }
