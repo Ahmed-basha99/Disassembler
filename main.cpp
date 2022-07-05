@@ -20,7 +20,7 @@ string convert3BitToABIName  (unsigned int binary) // a utility function that ta
     map[4]="a2";    map[5]="a3";  map[6]="a4";  map[3]="a5";
     return map[binary];
 }
-string convert5bitToABIName (unsigned int binary){
+string convert5bitToABIName (unsigned int binary){ // a utility function that takes number of a regsiter and returns its ABI name, EX : 000 => s0
 
     unordered_map<unsigned int ,string> map;
     map[0]= "zero"; map[1]= "ra";  map[2]= "sp"; map[3] = "gp";
@@ -35,7 +35,7 @@ string convert5bitToABIName (unsigned int binary){
     return map[binary];
 }
 
-void emitError(char *s)
+void emitError(char *s) //
 {
     cout << s;
     exit(0);
@@ -44,10 +44,11 @@ void emitError(char *s)
 void printPrefix(unsigned int instA, unsigned int instW){
     cout << "0x" << hex << std::setfill('0') << std::setw(8) << instA << "\t0x" << std::setw(8) << instW;
 }
-void instDecExec16bit (unsigned int instWord){
-    int instructionType = instWord & 0x0000007F & 3;
+void instDecExec16bit (unsigned int instWord){ // the main func that will translate the 16 bit machine codes to their representation in riscv
+    int instructionType = instWord & 0x0000007F & 3; // a var that get the first two bits of the code to determine other code is 16 bit or 32
 
     // 16 bit instruction
+    // vars that represent the operands of the different structured instructions
         unsigned int rd = (instWord >> 7) & 0x0000001F;
         unsigned int func4_extraBitForCR = (instWord>>12) &1;
         unsigned int func3_16bit = (instWord >>13) &  7;
@@ -63,7 +64,8 @@ void instDecExec16bit (unsigned int instWord){
         unsigned int CBrs1 = (instWord  >>7) &7;
         unsigned int CBimm =   (((((instWord >>12)&1 )?0xffffff80:0x0)|((instWord >>2)&1) <<4) | (((instWord >>3)&3)) | (((instWord >>5)&3)<<5) | (((instWord>>10)&3)<<2)) <<1;
         unsigned int rs2_C =(instWord >> 2) & 0x0000001F;
-        if (instructionType==2){
+
+        if (instructionType==2){ // isttype=10
             if (func3_16bit == 2 )
                 cout << "C.LWSP \t" <<convert5bitToABIName(rd)<< ",  " <<(int) (lwsp_imm *4)<< " (sp)" << "\n";
 
@@ -78,7 +80,7 @@ void instDecExec16bit (unsigned int instWord){
 
                 {
                     if (!rs2_C)
-                        cout << "jr \t  " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        cout << "jr \t  " << convert5bitToABIName(CrRS1) << "\t ,   0\n" ;
                     else{
                         cout << "MV    " << convert5bitToABIName(rd) << " ,     "<< convert5bitToABIName(((instWord >> 2) & 31) ) << "\n";
                     }}
@@ -86,7 +88,7 @@ void instDecExec16bit (unsigned int instWord){
                 else  { //C.jalr
                     if ( !rs2_C && !rd ) cout<<"EBREAK\n";
                     else if (!rs2_C)
-                        cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                        cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0\n" ;
                     else cout << "c.add \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C) << "\n";
                 }
 
@@ -101,7 +103,7 @@ void instDecExec16bit (unsigned int instWord){
 
         else if (instructionType ==0){  //Register-Based Loads and Stores format
 
-
+            // the riscv 32 instructions here are only LW, SW, so they differ in the func3_16bit only
             if (func3_16bit==2) cout << "C.LW\t" << convert3BitToABIName(rd16bit) << "\t" << (int) offset +pc << "(" << convert3BitToABIName(rs16bit) << ")\n";
             else if (func3_16bit==6) cout << "C.SW\t" << convert3BitToABIName(rd16bit) << "\t" << (int) offset + pc << "(" << convert3BitToABIName(rs16bit) << ")\n";
 
