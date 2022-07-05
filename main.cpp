@@ -46,7 +46,9 @@ void printPrefix(unsigned int instA, unsigned int instW){
 }
 void instDecExec16bit (unsigned int instWord){
     int instructionType = instWord & 0x0000007F & 3;
-
+    instWord = (int) instWord + pc;
+    instWord-=pc;
+    cout << instWord <<"\n" ;
     // 16 bit instruction
         unsigned int rd = (instWord >> 7) & 0x0000001F;
         unsigned int func4_extraBitForCR = (instWord>>12) &1;
@@ -56,7 +58,7 @@ void instDecExec16bit (unsigned int instWord){
         unsigned int offset = ( ((((signed)instWord >>5) & 1 ) ? 0xfffffff0:0x0)|((((signed)instWord >>10) &7) <<1) | (((signed)instWord >>6) & 1)) <<2 ;
         unsigned int imm_CIW =   ((instWord>>10)&1)?0xFFFFFFEF:0x0 | (((instWord>>5)&1)<<1) | (((instWord>>6)&1)) | (((instWord>>7)&7)<<4) | (((instWord>>10)&3)<<2);
         unsigned int func2 = (instWord >> 10)  &3;
-        unsigned int ciImm = ((( (( (signed)instWord >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( (signed)instWord >> 2) & 31)  )  ;
+         int ciImm = ((( (( instWord >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( instWord >> 2) & 31)  )  ;
         unsigned int lwsp_imm=  ( (((instWord>>3)&1)? 0xffffffe0:0x0) | ((instWord>>12)&1)<<3) | (((instWord >>2)&1)<<4) | (((instWord>>4)&7));
         unsigned int swsp_imm=( (((instWord>>8)&1)?0xffffffe0:0x0) |(((instWord >> 7) & 3) << 4) | (((instWord >> 9) & 7))) <<2;
         unsigned int immCJ =  ((((instWord >>12)&1)?0xFFFFFC00:0x0 )|(((instWord>>2) &1) <<4 ) | (((instWord >>3) &3)) | (((instWord >>6) &1) <<6) | (((instWord >>7)&1) <<5) | (((instWord >>8)&1) <<9) | (((instWord >>9) &3)<<7) |(((instWord >>11 )&1)<<3) ) <<1;
@@ -113,8 +115,9 @@ void instDecExec16bit (unsigned int instWord){
 
             if (func3_16bit==0)
             {
-                cout << ((signed int)instWord ) ;
-                ciImm = ((( (( (signed)instWord >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( (signed)instWord >> 2) & 31)  )  ;
+
+//                ciImm = ((( (( ((signed)instWord) >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( (signed)instWord >> 2) & 31)  )  ;
+
                 cout << "c.addi\t " << convert5bitToABIName((instWord >> 7) & 31) << ",    " << ((int)ciImm) << "\n" ;
 
             }
@@ -213,6 +216,7 @@ void instDecExec16bit (unsigned int instWord){
 void instDecExec32bit(unsigned int instWord)
 {
     int tmp = ((int) instWord) ;
+
     unsigned int rd, rs1, rs2,rs2_C, funct3, funct7, opcode;
     unsigned int I_imm, B_imm, S_imm, U_imm, J_imm;
     unsigned int address;
@@ -229,7 +233,9 @@ void instDecExec32bit(unsigned int instWord)
     shamt = (instWord >> 20) & 0x0000001F;
 
 
- I_imm = ((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
+
+
+ I_imm=((instWord >> 20) & 0x7FF) | (((instWord >> 31) ? 0xFFFFF800 : 0x0));
  U_imm = ((instWord >> 12) &0x7FFFF ) |( ((instWord >>31) &1)?0xfff80000:0x0 );  ;
 B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | (((instWord>>8) &15)) | (((instWord >>25)&63)<<4)  ) <<1 ;
  S_imm = ((((instWord>>31)&1)?0xfffff800 : 0x0 ) | (((instWord>>25)&63) <<5 ) |(((instWord>>7)&31)));
@@ -289,15 +295,15 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
         else if (opcode == 0x13) {    // I instructions
 
             switch (funct3) {
-                case 0:    cout << "\tADDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int) (I_imm) << "\n";
+                case 0:    cout << "\tADDI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)I_imm << "\n";
                 break;
-                case 1:    cout << "\tSLLI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<  (int)(shamt) << "\n";
+                case 1:    cout << "\tSLLI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<  (int)I_imm << "\n";  // fix this
                 break;
-                case 2:    cout << "\tSLTI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<  (int)(I_imm )<< "\n";
+                case 2:    cout << "\tSLTI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " <<  (int)I_imm << "\n";
                 break;
-                case 3:    cout << "\tSLTIU\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)(I_imm) << "\n";
+                case 3:    cout << "\tSLTIU\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)I_imm << "\n";
                 break;
-                case 4:    cout << "\tXORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)(I_imm )<< "\n";
+                case 4:    cout << "\tXORI\t " << convert5bitToABIName(rd) << ", " << convert5bitToABIName(rs1) << ", " << (int)I_imm<< "\n";
                 break;
             case 5: {
                 if (((instWord >> 30) & 1) == 1) {
@@ -389,16 +395,17 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
 
 
 int main (int argc, char *argv [] ){
-    instDecExec16bit(0x1151);
    unsigned  int input = 23912;
     unsigned int instWord=0;
     ifstream inFile;
     ofstream outFile;
 
-    if(argc<2) {
-        emitError("use: rvcdiss <machine_code_file_name>\n");
-    }
-    else cout  <<argv[2] <<"\n";
+//    if(argc<2) {
+//        emitError("use: rvcdiss <machine_code_file_name>\n");
+//    }
+//    else cout  <<argv[2] <<"\n";
+
+
     inFile.open(argv[2], ios::in | ios::binary | ios::ate);
     if(inFile.is_open())
     {
@@ -412,9 +419,10 @@ int main (int argc, char *argv [] ){
                     (((unsigned char)memory[pc+1])<<8) ;
 
             if (((int)instWord & 3 )!= 3) {
-                cout <<( int)instWord << "  \t";
+                cout <<instWord << "  \t";
                 pc+=2;
-                instDecExec16bit( (int)instWord);
+                int xx = (int)instWord;
+                instDecExec16bit( xx);
 
             }
             else {
@@ -424,7 +432,7 @@ int main (int argc, char *argv [] ){
 
                 cout <<(int)instWord << "  \t";
 
-                instDecExec32bit((int)instWord);
+                instDecExec32bit(instWord);
                 pc += 4;
             }
 

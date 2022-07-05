@@ -4,18 +4,36 @@ Implementation:
   we differentiated between each format by the opcodes that resides with each one, in addition we then narrowed down each format with its corresponding instruction by
   using"funct 3" which is used to identify each instruction, and rare case we use an additionalif statement to  differentiate the instructions down further using "funct 7"
   for R types for instance.
-Limitations and Known issues:
-  - The main issue or problem that we encountered was the immediate values, the offset wouldnt give us the result that was      expected. The 32 bit instructions ran smoothly but their were some errors in the 16 bit compressed format, other than that we didnt have any other complications. As for limitations t
+#Limitations and Known issues:
+There is an issue with Immi, with negative values, that could not be fixed due to shortage of time
+As for limitations, we could not add labels to the control instructions because we could not have enought time. 
+  
+# Contributions of each member:
+#Ahmed:
+- CJ
+- CI
+- CSS
+- CL
+- CS
+- CB
+- CIW
+- debuged all immediates and offsets
+- wrote 2 functions that maps register numbers with abi names
 
-Contributions of each member:
-Mokhtar:
+
+
+#Mokhtar:
   -
-Ahmed:
+
+
+
+#Mark:
   -
-Mark:
-  -
-Sarah:
+#Sarah:
   - B type (32 bit)
   - S type (32 bit)
   - Jal (32 bit)
   - Swsp (CSS format) and Lwsp (16 bit)
+
+
+
