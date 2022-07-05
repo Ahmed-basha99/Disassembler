@@ -17,7 +17,11 @@ Mokhtar:
 Ahmed:
   -
 Mark:
-  -
+  - I type(32 bit)
+  - U type (32 bit)
+  -jalr (32 bit)
+  - test cases for 32-bit instructions
+  - fixing the code
 Sarah:
   - B type (32 bit)
   - S type (32 bit)
