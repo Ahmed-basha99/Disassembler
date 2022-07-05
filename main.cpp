@@ -125,7 +125,7 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
             unsigned int rd16bit = (instWord >>2) & 7;
             unsigned int rs16bit = (instWord >>7) & 7;
             unsigned int offset = ( ((((signed)instWord >>5) & 1 ) ? 0xfffffff0:0x0)|((((signed)instWord >>10) &7) <<1) | (((signed)instWord >>6) & 1)) <<2 ;
-            unsigned int imm_CIW = (instWord >> 5) & 0xFF;
+            unsigned int imm_CIW =   ((instWord>>10)&1)?0xFFFFFFEF:0x0 | (((instWord>>5)&1)<<1) | (((instWord>>6)&1)) | (((instWord>>7)&7)<<4) | (((instWord>>10)&3)<<2);
 
             if (func3_16bit==2) cout << "C.LW\t" << convert3BitToABIName(rd16bit) << "\t" << (int) offset +pc << "(" << convert3BitToABIName(rs16bit) << ")\n";
             else if (func3_16bit==6) cout << "C.SW\t" << convert3BitToABIName(rd16bit) << "\t" << (int) offset + pc << "(" << convert3BitToABIName(rs16bit) << ")\n";
