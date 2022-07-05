@@ -3,13 +3,13 @@
 #include <fstream>
 #include "stdlib.h"
 #include <iomanip>
+#include <string>
 #include <iostream>
 using namespace std;
 
 unsigned int pc = 0x0;
 
 char memory[8*1024];	// only 8KB of memory located at address 0
-
 
 
 string convert3BitToABIName  (unsigned int binary) // a utility function that takes number of a regsiter and returns its ABI name, EX : 000 => s0
@@ -77,15 +77,15 @@ void instDecExec(unsigned int instWord)
 
  unsigned int part1 = (((instWord>>21)&0x03ff)<<1) + (((instWord>>20)&0x1)<<11)+(((instWord>>12)&0x0ff)<<12)+ (((instWord>>31)&1) <<20);
 
-<<<<<<< HEAD
- J_imm = ((instWord>>21)&0x03ff)<<1 ;
-=======
-j_11 = ((instWord >> 20) & 1) << 10;
-j_20 = ((instWord >> 31) & 1) << 19;
-j_21 = ((instWord >> 21) & 0x3FF ) << 10;
-j_7 =  ((instWord >> 12) & 0xFF) ;
-J_imm = (j_7 | j_11 | j_21 | j_20) < < 1;
->>>>>>> 4e74c9dbf78eb683774f4cf39695a8eb03817ace
+////<<<<<<< HEAD
+// J_imm = ((instWord>>21)&0x03ff)<<1 ;
+////=======
+//j_11 = ((instWord >> 20) & 1) << 10;
+//j_20 = ((instWord >> 31) & 1) << 19;
+//j_21 = ((instWord >> 21) & 0x3FF ) << 10;
+//j_7 =  ((instWord >> 12) & 0xFF) ;
+//J_imm = (j_7 | j_11 | j_21 | j_20) < < 1;
+//>>>>>>> 4e74c9dbf78eb683774f4cf39695a8eb03817ace
 
 //    printPrefix(instPC, instWord);
     int instructionType = opcode & 3;   // opcode & .b11
@@ -113,7 +113,7 @@ J_imm = (j_7 | j_11 | j_21 | j_20) < < 1;
                         if (!rs2_C)
                             cout << "C.jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
                         else
-                            cout << "C.MV  \tx0, " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1) << "\n";
+                            cout << "C.MV  \t " << convert5bitToABIName(rd) << "\t ,   "<< convert5bitToABIName(CrRS1) << "\n";
                     }
 
                     else  { //C.jalr
@@ -153,7 +153,7 @@ J_imm = (j_7 | j_11 | j_21 | j_20) < < 1;
             if (!func3_16bit)
             {
 
-                cout << "C.ADDI\t " << convert5bitToABIName(rdcli) << ",    " << signed (int (immCI ))<< "\n" ;
+                cout << "C.ADDI\t " << convert5bitToABIName(rdcli) << ",    " << int (immCI )<< "\n" ;
 
             }
 
@@ -394,70 +394,60 @@ J_imm = (j_7 | j_11 | j_21 | j_20) < < 1;
 }
 
 
-int main(){
 
-    instDecExec(4989);
+int main (int argc, char *argv [] ){
+//    instDecExec(4895); return 0;
+    unsigned  int input = 23912;
+    unsigned int instWord=0;
+    ifstream inFile;
+    ofstream outFile;
+    argv[1]= "../samples_2/fib_comp.bin";
+//    cout << argc << "\n";
+//    if(argc<2) {
+//        emitError("use: rvcdiss <machine_code_file_name>\n");
+//    }
 
+    inFile.open(argv[1], ios::in | ios::binary | ios::ate);
+    if(inFile.is_open())
+    {
+        int fsize = inFile.tellg();
+
+        inFile.seekg (0, inFile.beg);
+        if(!inFile.read((char *)memory, fsize)) emitError("Cannot read from input file\n");
+
+        while(pc<fsize){
+            // 2 pm
+            instWord = 	(unsigned char)memory[pc] |
+                    (((unsigned char)memory[pc+1])<<8) ;
+
+            if (((int)instWord & 3 )!= 3) {
+                cout <<hex<<( int)instWord << "  \t";
+                instDecExec(instWord);
+                pc+=2;
+            }
+            else {
+                instWord = (unsigned char)memory[pc] |
+                        (((unsigned char)memory[pc+1])<<8) |(((unsigned char)memory[pc+2])<<16) |
+                        (((unsigned char)memory[pc+3])<<24);
+
+                pc += 4;
+                cout <<hex<<( int)instWord << "  \t";
+                instDecExec(instWord);
+
+            }
+
+
+
+//            // remove the following line once you have a complete simulator
+
+//            if(pc==40) {
+//                cout <<"break\n";
+//                break;			// stop when PC reached address 32
+//            }
+        }
+    }
+    else emitError("Cannot access input file\n");
 
     return 0;
-
-
-
 }
-
-//int main (int argc, char *argv [] ){
-////    instDecExec(4895); return 0;
-//    unsigned  int input = 23912;
-//    unsigned int instWord=0;
-//    ifstream inFile;
-//    ofstream outFile;
-//    argv[1]= "../samples_2/fib_comp.bin";
-////    cout << argc << "\n";
-////    if(argc<2) {
-////        emitError("use: rvcdiss <machine_code_file_name>\n");
-////    }
-//
-//    inFile.open(argv[1], ios::in | ios::binary | ios::ate);
-//    if(inFile.is_open())
-//    {
-//        int fsize = inFile.tellg();
-//
-//        inFile.seekg (0, inFile.beg);
-//        if(!inFile.read((char *)memory, fsize)) emitError("Cannot read from input file\n");
-//
-//        while(pc<fsize){
-//            // 2 pm
-//            instWord = 	(unsigned char)memory[pc] |
-//                    (((unsigned char)memory[pc+1])<<8) ;
-//
-//            if (((int)instWord & 3 )!= 3) {
-//                cout <<hex<<( int)instWord << "  \t";
-//                instDecExec(instWord);
-//                pc+=2;
-//            }
-//            else {
-//                instWord = (unsigned char)memory[pc] |
-//                        (((unsigned char)memory[pc+1])<<8) |(((unsigned char)memory[pc+2])<<16) |
-//                        (((unsigned char)memory[pc+3])<<24);
-//
-//                pc += 4;
-//                cout <<hex<<( int)instWord << "  \t";
-//                instDecExec(instWord);
-//
-//            }
-//
-//
-//
-////            // remove the following line once you have a complete simulator
-//
-////            if(pc==40) {
-////                cout <<"break\n";
-////                break;			// stop when PC reached address 32
-////            }
-//        }
-//    }
-//    else emitError("Cannot access input file\n");
-//
-//    return 0;
-//}
 
