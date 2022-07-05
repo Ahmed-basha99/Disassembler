@@ -20,6 +20,7 @@ As for limitations, we could not add labels to the control instructions because 
 - debuged all immediates and offsets
 - wrote 2 functions that maps register numbers with abi names
 
+<<<<<<< HEAD
 
 
 #Mokhtar:
@@ -30,6 +31,24 @@ As for limitations, we could not add labels to the control instructions because 
 #Mark:
   -
 #Sarah:
+=======
+Contributions of each member:
+Mokhtar:
+  - R type (32bit)
+  - R forrmat (16 bit)
+  - Ebreak
+  - ecall
+  - Fixing erroes in the code.
+Ahmed:
+  -
+Mark:
+  - I type(32 bit)
+  - U type (32 bit)
+  -jalr (32 bit)
+  - test cases for 32-bit instructions
+  - fixing the code
+Sarah:
+>>>>>>> 2caaf38a5728861df8356c99e801d7e949f6b615
   - B type (32 bit)
   - S type (32 bit)
   - Jal (32 bit)

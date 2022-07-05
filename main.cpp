@@ -116,7 +116,7 @@ void instDecExec16bit (unsigned int instWord){
             if (func3_16bit==0)
             {
 
-//                ciImm = ((( (( ((signed)instWord) >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( (signed)instWord >> 2) & 31)  )  ;
+                ciImm = ((( (( ((signed)instWord) >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( (signed)instWord >> 2) & 31)  )  ;
 
                 cout << "c.addi\t " << convert5bitToABIName((instWord >> 7) & 31) << ",    " << ((int)ciImm) << "\n" ;
 
@@ -395,6 +395,7 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
 
 
 int main (int argc, char *argv [] ){
+
    unsigned  int input = 23912;
     unsigned int instWord=0;
     ifstream inFile;
@@ -404,7 +405,7 @@ int main (int argc, char *argv [] ){
 //        emitError("use: rvcdiss <machine_code_file_name>\n");
 //    }
 //    else cout  <<argv[2] <<"\n";
-
+    argv[2] = "fib.bin";
 
     inFile.open(argv[2], ios::in | ios::binary | ios::ate);
     if(inFile.is_open())
