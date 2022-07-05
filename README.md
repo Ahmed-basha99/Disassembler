@@ -9,7 +9,11 @@ Limitations and Known issues:
 
 Contributions of each member:
 Mokhtar:
-  -
+  - R type (32bit)
+  - R forrmat (16 bit)
+  - Ebreak
+  - ecall
+  - Fixing erroes in the code.
 Ahmed:
   -
 Mark:
