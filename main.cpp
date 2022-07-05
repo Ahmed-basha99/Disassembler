@@ -139,6 +139,7 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
              if (func3_16bit==0)
              {
                  cout << ((signed int)instWord ) ;
+                 ciImm = ((( (( (signed)instWord >> 12) & 1)) ? 0xFFFFFFE0 : 0x0   ) | (( (signed)instWord >> 2) & 31)  )  ;
                  cout << "c.addi\t " << convert5bitToABIName((instWord >> 7) & 31) << ",    " << ((int)ciImm) << "\n" ;
 
              }
