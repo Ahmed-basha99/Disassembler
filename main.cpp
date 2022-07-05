@@ -99,15 +99,15 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
 
                     {
                         if (!rs2_C)
-                            cout << "jr \tx0, " << convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                            cout << "C.jr \t, " << convert5bitToABIName(CrRS1) << "\t ,   0\n" ;
                         else{
-                            cout << "MV    " << convert5bitToABIName(rd) << " ,     "<< convert5bitToABIName(((instWord >> 2) & 31) ) << "\n";
+                            cout << "C.MV    " << convert5bitToABIName(rd) << " ,     "<< convert5bitToABIName(((instWord >> 2) & 31) ) << "\n";
                     }}
 
                     else  { //C.jalr
                         if ( !rs2_C && !rd ) cout<<"EBREAK\n";
                         else if (!rs2_C)
-                             cout << "jalr \tx1, " <<convert5bitToABIName(CrRS1) << "\t ,   0" ;
+                             cout << "c.jalr \t, " <<convert5bitToABIName(CrRS1) << "\t ,   0\n" ;
                         else cout << "c.add \t " <<convert5bitToABIName(rd) << "\t ,   " <<convert5bitToABIName(rs2_C) << "\n";
                     }
 
@@ -383,11 +383,11 @@ B_imm =((((instWord>>31)&1) ? 0xfffff800:0x0) | (((instWord >> 7) & 1)  <<10) | 
 
 int main (int argc, char *argv [] ){
     instDecExec(0x1151);
-   unsigned  int input = 23912;
+    unsigned  int input = 23912;
     unsigned int instWord=0;
     ifstream inFile;
     ofstream outFile;
-    argv[1]= "../samples_2/parr_comp.bin";
+    argv[1]= "../samples/div.bin";
 //    cout << argc << "\n";
 //    if(argc<2) {
 //        emitError("use: rvcdiss <machine_code_file_name>\n");
