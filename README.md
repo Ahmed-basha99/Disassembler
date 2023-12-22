@@ -9,7 +9,8 @@ There is an issue with Immi, with negative values, that could not be fixed due t
 As for limitations, we could not add labels to the control instructions because we could not have enought time. 
   
 # Contributions of each member:
-#Ahmed:
+# Ahmed:
+
 - CJ
 - CI
 - CSS
@@ -20,35 +21,21 @@ As for limitations, we could not add labels to the control instructions because 
 - debuged all immediates and offsets
 - wrote 2 functions that maps register numbers with abi names
 
-<<<<<<< HEAD
 
-
-#Mokhtar:
-  -
-
-
-
-#Mark:
-  -
-#Sarah:
-=======
-Contributions of each member:
-Mokhtar:
+# Mokhtar:
   - R type (32bit)
   - R forrmat (16 bit)
   - Ebreak
   - ecall
   - Fixing erroes in the code.
-Ahmed:
-  -
-Mark:
+
+# Mark:
   - I type(32 bit)
   - U type (32 bit)
   -jalr (32 bit)
   - test cases for 32-bit instructions
   - fixing the code
-Sarah:
->>>>>>> 2caaf38a5728861df8356c99e801d7e949f6b615
+# Sarah:
   - B type (32 bit)
   - S type (32 bit)
   - Jal (32 bit)
